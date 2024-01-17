@@ -1,15 +1,32 @@
-## Create a simple flask application.
-from flask import Flask
+## Create a simple flask application where in we want to put some marks (3 subjects) thencalculate the average marks and give the result
+## if the marks is less than 50 then mark the result as failed and if its greater than 50 then mark it as pass.
+
+from flask import Flask, render_template, request, redirect, url_for
+
 ##create flask app
 app=Flask(__name__)
 
-@app.route('/')
-def home():
-    return 'Hello World'
+@app.route('/success/<int:score>')
+def success(score):
+    return 'the score is '+ str(score)
 
-@app.route('/welcome')
-def welcome():
-    return 'welcome to the flask tutorial'
+@app.route('/fail/<int:score>')
+def fail(score):
+    return 'the person has failed and the score is '+ str(score)
+
+
+@app.route('/calculate',methods=['POST','GET'])
+def calculate():
+    if request.method=='GET':
+        return render_template('calculate.html')
+    else:
+        Maths=float(request.form['Maths'])
+        science=float(request.form['science'])
+        economics=float(request.form['economics'])
+
+        average_marks=(Maths+science+economics)/3
+
+        return render_template('result.html',results=average_marks)
 
 
 if __name__=='__main__':
